@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.pge.account_service.domain.User;
 import com.pge.account_service.domain.UserType;
 import com.pge.account_service.repository.UserRepository;
 
@@ -21,6 +22,6 @@ public class DataInitializer {
                 repository.save(new User(null, "Davi (Motorista)", UserType.MOTORISTA));
                 System.out.println("Dados iniciais de mock inseridos com sucesso!");
             }
-        }
+        };
     }
 }
