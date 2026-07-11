@@ -1,4 +1,6 @@
+package com.pge.account_service.domain;
+
 public enum UserType {
-    CLIENTE,
+    PASSAGEIRO,
     MOTORISTA
 }

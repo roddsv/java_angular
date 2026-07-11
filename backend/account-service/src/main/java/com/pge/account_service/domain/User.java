@@ -1,4 +1,4 @@
-import com.pge.account_service.domain.UserType;
+package com.pge.account_service.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
