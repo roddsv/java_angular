@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pge.ride_service.RideService;
 import com.pge.ride_service.domain.Ride;
+import com.pge.ride_service.service.RideService;
 
 @RestController
 @RequestMapping("/rides")

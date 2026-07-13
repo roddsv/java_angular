@@ -1,4 +1,4 @@
-package com.pge.ride_service;
+package com.pge.ride_service.service;
 
 import org.springframework.stereotype.Service;
 
@@ -7,6 +7,7 @@ import com.pge.ride_service.domain.Ride;
 import com.pge.ride_service.dto.UserDTO;
 import com.pge.ride_service.exception.ResourceNotFoundException;
 import com.pge.ride_service.exception.ValidationException;
+import com.pge.ride_service.producer.RideProducer;
 import com.pge.ride_service.repository.RideRepository;
 
 @Service
@@ -14,10 +15,12 @@ public class RideService {
 
     private final RideRepository rideRepository;
     private final AccountClient accountClient;
+    private final RideProducer rideProducer;
 
-    public RideService(RideRepository rideRepository, AccountClient accountClient) {
+    public RideService(RideRepository rideRepository, AccountClient accountClient, RideProducer rideProducer) {
         this.rideRepository = rideRepository;
         this.accountClient = accountClient;
+        this.rideProducer = rideProducer;
     }
 
     public Ride createRide(Ride ride) {
@@ -36,6 +39,9 @@ public class RideService {
         }
 
         ride.setStatus("CRIADO");
-        return rideRepository.save(ride);
+        Ride savedRide = rideRepository.save(ride);
+        rideProducer.sendNewRideNotification(savedRide);
+
+        return savedRide;
     }
 }
