@@ -9,6 +9,6 @@ import com.pge.ride_service.dto.UserDTO;
 @FeignClient(value = "account-service")
 public interface AccountClient {
 
-    @GetMapping("/accounts/id")
+    @GetMapping("/accounts/{id}")
     UserDTO findById(@PathVariable("id") Long id);
 }
