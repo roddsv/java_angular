@@ -1,5 +1,6 @@
 package com.pge.ride_service.service;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.pge.ride_service.client.AccountClient;
@@ -16,11 +17,13 @@ public class RideService {
     private final RideRepository rideRepository;
     private final AccountClient accountClient;
     private final RideProducer rideProducer;
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    public RideService(RideRepository rideRepository, AccountClient accountClient, RideProducer rideProducer) {
+    public RideService(RideRepository rideRepository, AccountClient accountClient, RideProducer rideProducer, RedisTemplate<String, Object> redisTemplate) {
         this.rideRepository = rideRepository;
         this.accountClient = accountClient;
         this.rideProducer = rideProducer;
+        this.redisTemplate = redisTemplate;
     }
 
     public Ride createRide(Ride ride) {
@@ -43,5 +46,22 @@ public class RideService {
         rideProducer.sendNewRideNotification(savedRide);
 
         return savedRide;
+    }
+
+    public Ride acceptRide(Long rideId, Long motoristaId) {
+        Ride ride = rideRepository.findById(rideId)
+            .orElseThrow(() -> new ResourceNotFoundException("Corrida não encontrada. ID: " + rideId));
+
+        ride.setMotoristaId(motoristaId);
+        ride.setStatus("EM_ANDAMENTO");
+
+        Ride updatedRide = rideRepository.save(ride);
+
+        String redisKey = "ride:status:" + rideId;
+        redisTemplate.opsForValue().set(redisKey, "EM_ANDAMENTO");
+
+        System.out.println("Corrida " + rideId + " aceita pelo motorista " + motoristaId + ". Status salvo no Redis");
+
+        return updatedRide;
     }
 }
