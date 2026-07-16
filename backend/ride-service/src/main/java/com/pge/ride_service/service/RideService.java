@@ -1,5 +1,7 @@
 package com.pge.ride_service.service;
 
+import java.util.List;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -63,5 +65,9 @@ public class RideService {
         System.out.println("Corrida " + rideId + " aceita pelo motorista " + motoristaId + ". Status salvo no Redis");
 
         return updatedRide;
+    }
+
+    public List<Ride> getAllRides() {
+        return rideRepository.findAll();
     }
 }

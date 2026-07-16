@@ -1,5 +1,7 @@
 package com.pge.ride_service.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,5 +45,11 @@ public class RideController {
     public ResponseEntity<Ride> accept(@PathVariable Long id, @RequestParam Long motoristaId) {
         Ride ride = rideService.acceptRide(id, motoristaId);
         return ResponseEntity.ok(ride);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Ride>> findAll() {
+        List<Ride> rides = rideService.getAllRides();
+        return ResponseEntity.ok(rides);
     }
 }
